@@ -107,8 +107,25 @@ public class TicketMachine
     {
         int totalDevuelto;
         totalDevuelto = balance;
-        total = 0;
-        balance = 0;
+        if(total > 0){
+            balance = 0;
+            total = 0;
+        }
+        else{
+            totalDevuelto = -1;
+            System.out.println("Hay una operacion en curso");
+        }
         return totalDevuelto;
     }
+    
+    /**
+     * public int emptyMachine()
+ +    {
+ +        int totalDevuelto;
+ +        totalDevuelto = balance;
+ +        total = 0;
+ +        balance = 0;
+ +        return totalDevuelto;
+ +    }
+     */
 }

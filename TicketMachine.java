@@ -17,15 +17,24 @@ public class TicketMachine
     private int balance;
     // The total amount of money collected by this machine.
     private int total;
+    //para comprobar si el billete es premiado o no.
+    private boolean premio;
+    //guardar el numero de billetes
+    private int numeroMaximoBilletes;
+
+    private int billetesVendidos;
 
     /**
      * Create a machine that issues tickets of the given price.
      */
-    public TicketMachine(int cost)
+    public TicketMachine(int cost, boolean billeteGanador, int numeroDeBilletes)
     {
         price = cost;
         balance = 0;
         total = 0;
+        premio = billeteGanador;
+        billetesVendidos = 0;
+        numeroMaximoBilletes = numeroDeBilletes;
     }
 
     /**
@@ -51,12 +60,17 @@ public class TicketMachine
      */
     public void insertMoney(int amount)
     {
-        if(amount > 0) {
-            balance = balance + amount;
+        if(billetesVendidos < numeroMaximoBilletes){
+            if(amount > 0) {
+                balance = balance + amount;
+            }
+            else {
+                System.out.println("Use a positive amount rather than: " +
+                    amount);
+            }
         }
-        else {
-            System.out.println("Use a positive amount rather than: " +
-                               amount);
+        else{
+            System.out.println("Se han vendido todos los billetes");
         }
     }
 
@@ -67,24 +81,37 @@ public class TicketMachine
      */
     public void printTicket()
     {
-        if(balance >= price) {
-            // Simulate the printing of a ticket.
-            System.out.println("##################");
-            System.out.println("# The BlueJ Line");
-            System.out.println("# Ticket");
-            System.out.println("# " + price + " cents.");
-            System.out.println("##################");
-            System.out.println();
+        if(billetesVendidos < numeroMaximoBilletes){
+            if(balance >= price) {
+                // Simulate the printing of a ticket.
+                System.out.println("##################");
+                System.out.println("# The BlueJ Line");
+                System.out.println("# Ticket");
+                System.out.println("# " + price + " cents.");
+                System.out.println("##################");
+                System.out.println();
 
-            // Update the total collected with the price.
-            total = total + price;
-            // Reduce the balance by the prince.
-            balance = balance - price;
+                if(premio == true){
+                    System.out.println("###############");
+                    System.out.println("Ticket Premiado!!");
+                    System.out.println("###############");
+                }
+
+                // Update the total collected with the price.
+                total = total + price;
+                // Reduce the balance by the prince.
+                balance = balance - price;
+                
+                billetesVendidos = billetesVendidos + 1;
+            }
+            else {
+                System.out.println("You must insert at least: " +
+                    (price - balance) + " more cents.");
+
+            }
         }
-        else {
-            System.out.println("You must insert at least: " +
-                               (price - balance) + " more cents.");
-                    
+        else{
+            System.out.println("Todos los billetes vendidos");
         }
     }
 
@@ -99,33 +126,33 @@ public class TicketMachine
         balance = 0;
         return amountToRefund;
     }
-    
+
     /**
-     * vacia la maquina de monedas
+     * vacia la maquina de monedas, si esta una operacion en curso devuelve -1 
+     * y nos muestra un mensaje de error
      */
     public int emptyMachine()
     {
-        int totalDevuelto;
-        totalDevuelto = balance;
-        if(total > 0){
-            balance = 0;
+        int totalDevuelto = -1;
+        totalDevuelto = total;
+        if(balance == 0){
             total = 0;
+            balance = 0;
         }
         else{
-            totalDevuelto = -1;
             System.out.println("Hay una operacion en curso");
         }
         return totalDevuelto;
     }
-    
+
     /**
      * public int emptyMachine()
- +    {
- +        int totalDevuelto;
- +        totalDevuelto = balance;
- +        total = 0;
- +        balance = 0;
- +        return totalDevuelto;
- +    }
+    +    {
+    +        int totalDevuelto;
+    +        totalDevuelto = balance;
+    +        total = 0;
+    +        balance = 0;
+    +        return totalDevuelto;
+    +    }
      */
 }
